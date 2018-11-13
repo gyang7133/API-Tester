@@ -2,9 +2,9 @@ body{
     background-color:rgb(255, 162, 178);
     font-family: 'Vidaloka', serif;
 }
-#geo-map{
+/* #geo-map{
     background-color: yellow;
-}
+} */
 #footer{
     background-color: rgb(114, 114, 114);
 }

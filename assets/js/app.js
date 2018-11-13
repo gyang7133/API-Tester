@@ -2,7 +2,7 @@ const address = [];
 const apiKey = "AIzaSyBCV-XaXEae9Nr0WjrZyfHjm5bUi6CfZRs";
 const placeIDs = [];
 let map;
-let parkIDs = [];
+let restuarantIDs = [];
 
 //check to see if check boxes are disabled
 let btnDisabled = false;
@@ -18,14 +18,14 @@ let placesToDump = [];
 
 
 $(document).ready(function () {
-    $(".filled-in").on("click", function () {
+    $(".form-check-input").on("click", function () {
         $(this).attr("isSelected", "true");
-        $("#location-dump").empty();
+        $("#rest-info").empty();
         toSearchFor = "";
         toSearchFor = $(this).attr("data-text");
 
         isFormComplete = true;
-        parkIDs = [];
+        restuarantIDs = [];
 
         if (!btnDisabled) {
             disableBoxes(this);
@@ -45,17 +45,17 @@ const disableBoxes = (caller) => {
     let storedTxt = $(chosenBox).attr("data-text");
     btnDisabled = true;
     switch (storedTxt) {
-        case "dogpark":
-            $("#check-vet").attr("disabled", "disabled");
-            $("#check-store").attr("disabled", "disabled");
+        case "hamburgers":
+            $("#check-breakfast").attr("disabled", "disabled");
+            $("#check-japanese").attr("disabled", "disabled");
             break;
-        case "veterinary":
-            $("#check-store").attr("disabled", "disabled");
-            $("#check-park").attr("disabled", "disabled");
+        case "breakfast":
+            $("#check-diner").attr("disabled", "disabled");
+            $("#check-japanese").attr("disabled", "disabled");
             break;
-        case "pet+store":
-            $("#check-park").attr("disabled", "disabled");
-            $("#check-vet").attr("disabled", "disabled");
+        case "japanese":
+            $("#check-breakfast").attr("disabled", "disabled");
+            $("#check-diner").attr("disabled", "disabled");
             break;
         default:
             return;
@@ -67,21 +67,21 @@ const releaseBoxes = (caller) => {
     let storedTxt = $(caller).attr("data-text");
 
     switch (storedTxt) {
-        case "dogpark":
-            $("#check-vet").removeAttr("disabled");
-            $("#check-store").removeAttr("disabled");
+        case "hamburgers":
+            $("#check-breakfast").removeAttr("disabled");
+            $("#check-japanese").removeAttr("disabled");
             btnDisabled = false;
 
             break;
-        case "veterinary":
-            $("#check-store").removeAttr("disabled");
-            $("#check-park").removeAttr("disabled");
+        case "breakfast":
+            $("#check-diner").removeAttr("disabled");
+            $("#check-japanese").removeAttr("disabled");
             btnDisabled = false;
 
             break;
-        case "pet+store":
-            $("#check-park").removeAttr("disabled");
-            $("#check-vet").removeAttr("disabled");
+        case "japanese":
+            $("#check-breakfast").removeAttr("disabled");
+            $("#check-diner").removeAttr("disabled");
             btnDisabled = false;
 
             break;
@@ -93,12 +93,13 @@ const releaseBoxes = (caller) => {
 
 //gets the address the user inputs
 const getAddress = () => {
-    let street = $("#house").val().trim();
+    let street = $("#address").val().trim();
     let city = $("#city").val().trim();
     let state = $("#state").val().trim();
+    let zipcode = $("#zipcode").val().trim();
 
     //pushes it to the address array
-    address.push(street, city, state);
+    address.push(street, city, state, zipcode);
 }
 
 $('#submit-geo').on('click', function () {
@@ -135,7 +136,7 @@ $('#submit-geo').on('click', function () {
 
 //creates a map to said id
 const initMap = (coords) => {
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('geo-map'), {
         center: coords,
         //controls how 'zoomed' the map will start
         zoom: 11
@@ -171,12 +172,12 @@ const getPetPlaces = (coords) => {
             let place = {
                 id: source[i].place_id
             }
-            //pushes place id into parkIDs
-            parkIDs.push(place);
+            //pushes place id into restuarantIDs
+            restuarantIDs.push(place);
 
         }
         //renders palce markers to the map
-        renderMarks(map, parkIDs);
+        renderMarks(map, restuarantIDs);
     });
 }
 
@@ -195,7 +196,7 @@ const renderMarks = (map, idArr) => {
                 //create for a place
                 let marker = new google.maps.Marker({
                     icon: {
-                        url: `assets/images/markers/mark3.png`,
+                        // url: ,
                         size: new google.maps.Size(22, 43),
                         origin: new google.maps.Point(0, 0),
                         anchor: new google.maps.Point(25.5, 29)
@@ -233,8 +234,7 @@ const renderMarks = (map, idArr) => {
                     }
 
                 }
-                //if the place rating is greater than or equal to 4.6, render the follwoing conent to the 'recommendations' div
-
+                //if the place rating is greater than or equal to 4.6, render the following content to the 'restuarant recommendations' div
 
                 if (place.rating >= 4.6) {
 
@@ -242,7 +242,7 @@ const renderMarks = (map, idArr) => {
                         'Rating: ' + place.rating + checkPhone() +
                         '</div>' + getTravelUrl(address, place.formatted_address));
 
-                    $("#location-dump").append(text);
+                    $("#rest-info").append(text);
 
                 }
 

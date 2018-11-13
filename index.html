@@ -35,7 +35,7 @@
     </nav>
 <br>
     <!-- Search and Filter Section -->
-    <div id="fade-test" class="container-fluid">
+    <div class="container-fluid">
             <div class="row">
                 <div class="col-4 ml-10 pl-5" id="filter">
                     <h5>Restaurant Category Filter</h5>
@@ -53,7 +53,7 @@
                         <input class="form-check-input" type="checkbox" data-text="japanese" value="" id="check-japanese">
                         <label class="form-check-label" for="check-japanese">Japanese</label>
                     </div> <br>
-                    <div class="form-check">
+                    <!-- <div class="form-check">
                         <input class="form-check-input" type="checkbox" data-text="chinese" value="" id="check-Chinese">
                         <label class="form-check-label" for="check-chinese">Chinese</label>
                     </div> <br>
@@ -68,10 +68,10 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" data-text="desserts" value="" id="check-desserts">
                         <label class="form-check-label" for="check-desserts">Desserts</label>
-                    </div> <br>
+                    </div> <br> -->
 
                 </div>
-                <div class="col-6">
+                <div id="fade-test" class="col-6">
                     <form>
                         <div class="form-group">
                             <label for="house">Street Address</label>
@@ -89,7 +89,7 @@
                             <label for="city">Zipcode</label>
                             <input type="text" class="form-control" id="city" placeholder="Enter Zipcode">  
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="submit-geo">Submit</button>
                     </form>
                 </div>
             </div>
