@@ -1,8 +1,10 @@
 const address = [];
-const apiKey = "AIzaSyBCV-XaXEae9Nr0WjrZyfHjm5bUi6CfZRs";
+const apiKey = "AIzaSyBtDXqrmP1A6NzPFxzjveh5ICYCFywHeKU";
 const placeIDs = [];
 let map;
+let userAddress;
 let restuarantIDs = [];
+let queryUrl;
 
 //check to see if check boxes are disabled
 let btnDisabled = false;
@@ -20,7 +22,7 @@ let placesToDump = [];
 $(document).ready(function () {
     $(".form-check-input").on("click", function () {
         $(this).attr("isSelected", "true");
-        $("#rest-info").empty();
+        $('#rest-info').empty();
         toSearchFor = "";
         toSearchFor = $(this).attr("data-text");
 
@@ -48,14 +50,32 @@ const disableBoxes = (caller) => {
         case "hamburgers":
             $("#check-breakfast").attr("disabled", "disabled");
             $("#check-japanese").attr("disabled", "disabled");
+            $("#check-chinese").attr("disabled", "disabled");
+            $("#check-mexican").attr("disabled", "disabled");
             break;
         case "breakfast":
             $("#check-diner").attr("disabled", "disabled");
             $("#check-japanese").attr("disabled", "disabled");
+            $("#check-chinese").attr("disabled", "disabled")
+            $("#check-mexican").attr("disabled", "disabled");
             break;
-        case "japanese":
+        case "japanese restaurant":
             $("#check-breakfast").attr("disabled", "disabled");
             $("#check-diner").attr("disabled", "disabled");
+            $("#check-chinese").attr("disabled", "disabled")
+            $("#check-mexican").attr("disabled", "disabled");
+            break;
+         case "chinese restaurant":
+            $("#check-breakfast").attr("disabled", "disabled");
+            $("#check-diner").attr("disabled", "disabled");
+            $("#check-japanese").attr("disabled", "disabled")
+            $("#check-mexican").attr("disabled", "disabled");
+            break;
+        case "mexican":
+            $("#check-breakfast").attr("disabled", "disabled");
+            $("#check-diner").attr("disabled", "disabled");
+            $("#check-japanese").attr("disabled", "disabled")
+            $("#check-chinese").attr("disabled", "disabled")
             break;
         default:
             return;
@@ -79,7 +99,7 @@ const releaseBoxes = (caller) => {
             btnDisabled = false;
 
             break;
-        case "japanese":
+        case "japanese restaurant":
             $("#check-breakfast").removeAttr("disabled");
             $("#check-diner").removeAttr("disabled");
             btnDisabled = false;
@@ -102,16 +122,18 @@ const getAddress = () => {
     address.push(street, city, state, zipcode);
 }
 
-$('#submit-geo').on('click', function () {
+$('#submit-geo').on('click', function (event) {
     //if the user has given an address and chosen what they want to search for
+    event.preventDefault();
+
     if (isFormComplete) {
         getAddress();
 
         //sets the address
-        let userAddress = address.join();
+        userAddress = address.join();
         let coords;
 
-        let queryUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${userAddress}&key=${apiKey}`;
+        queryUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${userAddress}&key=${apiKey}`;
         $.ajax({
             url: queryUrl,
             method: 'GET'
@@ -119,7 +141,7 @@ $('#submit-geo').on('click', function () {
 
 
             let source = response.results;
-
+            console.log(source);
             for (let i = 0; i < source.length; i++) {
                 //creates a variable that will hold the users lat and lng coordinates
                 coords = { lat: source[i].geometry.location.lat, lng: source[i].geometry.location.lng };
@@ -131,7 +153,7 @@ $('#submit-geo').on('click', function () {
     } else {
         return false;
     }
-
+ 
 });
 
 //creates a map to said id
@@ -142,11 +164,11 @@ const initMap = (coords) => {
         zoom: 11
     });
     //recieve locations at a 10 mile radius from the user's coordinates
-    getPetPlaces(coords);
+    getRestPlaces(coords);
 }
 
 // returns places around the user at 10-mile radius
-const getPetPlaces = (coords) => {
+const getRestPlaces = (coords) => {
 
     let coordsArr = [];
 
@@ -176,7 +198,7 @@ const getPetPlaces = (coords) => {
             restuarantIDs.push(place);
 
         }
-        //renders palce markers to the map
+        //renders place markers to the map
         renderMarks(map, restuarantIDs);
     });
 }
@@ -196,7 +218,6 @@ const renderMarks = (map, idArr) => {
                 //create for a place
                 let marker = new google.maps.Marker({
                     icon: {
-                        // url: ,
                         size: new google.maps.Size(22, 43),
                         origin: new google.maps.Point(0, 0),
                         anchor: new google.maps.Point(25.5, 29)
@@ -236,7 +257,7 @@ const renderMarks = (map, idArr) => {
                 }
                 //if the place rating is greater than or equal to 4.6, render the following content to the 'restuarant recommendations' div
 
-                if (place.rating >= 4.6) {
+                if (place.rating >= 4.0) {
 
                     let text = $('<div id="fade-test"><strong>' + place.name + '</strong><br>' +
                         'Rating: ' + place.rating + checkPhone() +
@@ -244,14 +265,17 @@ const renderMarks = (map, idArr) => {
 
                     $("#rest-info").append(text);
 
+                    console.log("Code is working");
+
                 }
 
-                if (place.rating >= 4.6) {
+                if (place.rating >= 4.0) {
                     let gPlace = {
                         name: place.name,
                         rating: place.rating,
                         phone: checkPhone(),
                         address: place.formatted_address
+
                     }
 
                     placesToDump.push(gPlace);
@@ -261,31 +285,31 @@ const renderMarks = (map, idArr) => {
             }
         });
     }
-    sortArr(placesToDump);
+    // sortArr(placesToDump);
     console.log(placesToDump);
 
 }
 
-const sortArr = (arr) => {
-    console.log("sort initialize");
-    for (let i = 0; i < arr.length; i++) {
-        for (let z = 0; z < arr.length; z++) {
-            if (arr[z].rating < arr[(z + 1)].rating) {
-                let lower = arr[z];
-                let higher = arr[(z + 1)];
-                console.log('lower', lower);
-                console.log('higher', higher);
+// const sortArr = (arr) => {
+//     console.log("sort initialize");
+//     for (let i = 0; i < arr.length; i++) {
+//         for (let z = 0; z < arr.length; z++) {
+//             if (arr[z].rating < arr[(z + 1)].rating) {
+//                 let lower = arr[z];
+//                 let higher = arr[(z + 1)];
+//                 console.log('lower', lower);
+//                 console.log('higher', higher);
 
-                arr[z] = higher;
-                arr[(z + 1)] = lower;
-            } else {
-                console.log("this algo is porbs not working correctly");
-            }
-        }
-    }
+//                 arr[z] = higher;
+//                 arr[(z + 1)] = lower;
+//             } else {
+//                 console.log("this algo is porbs not working correctly");
+//             }
+//         }
+//     }
 
-    console.log(arr);
-}
+//     console.log(arr);
+// }
 
 const getTravelUrl = (origin, destination) => {
     return `<a href="https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving" target="_blank">${destination}</a>`;
