@@ -2,9 +2,9 @@ const address = [];
 const apiKey = "AIzaSyBtDXqrmP1A6NzPFxzjveh5ICYCFywHeKU";
 const placeIDs = [];
 let map;
-let userAddress;
+// let userAddress;
 let restuarantIDs = [];
-let queryUrl;
+// let queryUrl;
 
 //check to see if check boxes are disabled
 let btnDisabled = false;
@@ -130,10 +130,10 @@ $('#submit-geo').on('click', function (event) {
         getAddress();
 
         //sets the address
-        userAddress = address.join();
+        let userAddress = address.join();
         let coords;
 
-        queryUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${userAddress}&key=${apiKey}`;
+        let queryUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${userAddress}&key=${apiKey}`;
         $.ajax({
             url: queryUrl,
             method: 'GET'
@@ -231,7 +231,7 @@ const renderMarks = (map, idArr) => {
                 google.maps.event.addListener(marker, 'click', function () {
                     infowindow.setContent('<div id="fade-test"><strong>' + place.name + '</strong><br>' +
                         'Rating: ' + place.rating  + checkPhone() + 
-                        getTravelUrl(address, place.formatted_address) + '</div>');
+                        getTravelUrl(address, place.formatted_address) + '<br></div>');
                     infowindow.open(map, this);
                 });
                 function toggleBounce() {
