@@ -52,30 +52,56 @@ const disableBoxes = (caller) => {
             $("#check-japanese").attr("disabled", "disabled");
             $("#check-chinese").attr("disabled", "disabled");
             $("#check-mexican").attr("disabled", "disabled");
+            $("#check-pizza").attr("disabled", "disabled")
+            $("#check-desserts").attr("disabled", "disabled")
             break;
         case "breakfast":
             $("#check-diner").attr("disabled", "disabled");
             $("#check-japanese").attr("disabled", "disabled");
             $("#check-chinese").attr("disabled", "disabled")
             $("#check-mexican").attr("disabled", "disabled");
+            $("#check-pizza").attr("disabled", "disabled")
+            $("#check-desserts").attr("disabled", "disabled")
             break;
         case "japanese restaurant":
             $("#check-breakfast").attr("disabled", "disabled");
             $("#check-diner").attr("disabled", "disabled");
             $("#check-chinese").attr("disabled", "disabled")
             $("#check-mexican").attr("disabled", "disabled");
+            $("#check-pizza").attr("disabled", "disabled")
+            $("#check-desserts").attr("disabled", "disabled")
             break;
          case "chinese restaurant":
             $("#check-breakfast").attr("disabled", "disabled");
             $("#check-diner").attr("disabled", "disabled");
             $("#check-japanese").attr("disabled", "disabled")
             $("#check-mexican").attr("disabled", "disabled");
+            $("#check-pizza").attr("disabled", "disabled")
+            $("#check-desserts").attr("disabled", "disabled")
             break;
-        case "mexican":
+        case "mexican restaurant":
             $("#check-breakfast").attr("disabled", "disabled");
             $("#check-diner").attr("disabled", "disabled");
             $("#check-japanese").attr("disabled", "disabled")
             $("#check-chinese").attr("disabled", "disabled")
+            $("#check-pizza").attr("disabled", "disabled")
+            $("#check-desserts").attr("disabled", "disabled")
+            break;
+        case "pizza":
+            $("#check-breakfast").attr("disabled", "disabled");
+            $("#check-diner").attr("disabled", "disabled");
+            $("#check-japanese").attr("disabled", "disabled")
+            $("#check-chinese").attr("disabled", "disabled")
+            $("#check-mexican").attr("disabled", "disabled")
+            $("#check-desserts").attr("disabled", "disabled")
+            break;
+        case "desserts":
+            $("#check-breakfast").attr("disabled", "disabled");
+            $("#check-diner").attr("disabled", "disabled");
+            $("#check-japanese").attr("disabled", "disabled")
+            $("#check-chinese").attr("disabled", "disabled")
+            $("#check-pizza").attr("disabled", "disabled")
+            $("#check-mexican").attr("disabled", "disabled")
             break;
         default:
             return;
@@ -90,20 +116,67 @@ const releaseBoxes = (caller) => {
         case "hamburgers":
             $("#check-breakfast").removeAttr("disabled");
             $("#check-japanese").removeAttr("disabled");
+            $("#check-chinese").removeAttr("disabled")
+            $("#check-mexican").removeAttr("disabled")
+            $("#check-pizza").removeAttr("disabled")
+            $("#check-desserts").removeAttr("disabled")
             btnDisabled = false;
 
             break;
         case "breakfast":
             $("#check-diner").removeAttr("disabled");
             $("#check-japanese").removeAttr("disabled");
+            $("#check-chinese").removeAttr("disabled")
+            $("#check-mexican").removeAttr("disabled")
+            $("#check-pizza").removeAttr("disabled")
+            $("#check-desserts").removeAttr("disabled")
             btnDisabled = false;
 
             break;
         case "japanese restaurant":
             $("#check-breakfast").removeAttr("disabled");
             $("#check-diner").removeAttr("disabled");
+            $("#check-chinese").removeAttr("disabled")
+            $("#check-mexican").removeAttr("disabled")
+            $("#check-pizza").removeAttr("disabled")
+            $("#check-desserts").removeAttr("disabled")
             btnDisabled = false;
-
+            break;
+        case "chinese restaurant":
+            $("#check-breakfast").removeAttr("disabled");
+            $("#check-diner").removeAttr("disabled");
+            $("#check-mexican").removeAttr("disabled")
+            $("#check-japanese").removeAttr("disabled")
+            $("#check-pizza").removeAttr("disabled")
+            $("#check-desserts").removeAttr("disabled")
+            btnDisabled = false;
+            break;
+        case "mexican restaurant":
+            $("#check-breakfast").removeAttr("disabled");
+            $("#check-diner").removeAttr("disabled");
+            $("#check-chinese").removeAttr("disabled")
+            $("#check-japanese").removeAttr("disabled")
+            $("#check-pizza").removeAttr("disabled")
+            $("#check-desserts").removeAttr("disabled")
+            btnDisabled = false;
+            break;
+        case "pizza":
+            $("#check-breakfast").removeAttr("disabled");
+            $("#check-diner").removeAttr("disabled");
+            $("#check-mexican").removeAttr("disabled")
+            $("#check-japanese").removeAttr("disabled")
+            $("#check-chinese").removeAttr("disabled")
+            $("#check-desserts").removeAttr("disabled")
+            btnDisabled = false;
+            break;
+        case "desserts":
+            $("#check-breakfast").removeAttr("disabled");
+            $("#check-diner").removeAttr("disabled");
+            $("#check-mexican").removeAttr("disabled")
+            $("#check-japanese").removeAttr("disabled")
+            $("#check-chinese").removeAttr("disabled")
+            $("#check-pizza").removeAttr("disabled")
+            btnDisabled = false;
             break;
         default:
             return;
@@ -141,7 +214,7 @@ $('#submit-geo').on('click', function (event) {
 
 
             let source = response.results;
-            console.log(source);
+            // console.log(source);
             for (let i = 0; i < source.length; i++) {
                 //creates a variable that will hold the users lat and lng coordinates
                 coords = { lat: source[i].geometry.location.lat, lng: source[i].geometry.location.lng };
@@ -217,11 +290,6 @@ const renderMarks = (map, idArr) => {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 //create for a place
                 let marker = new google.maps.Marker({
-                    icon: {
-                        size: new google.maps.Size(22, 43),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(25.5, 29)
-                    },
                     map: map,
                     animation: google.maps.Animation.DROP,
                     position: place.geometry.location
@@ -285,31 +353,9 @@ const renderMarks = (map, idArr) => {
             }
         });
     }
-    // sortArr(placesToDump);
     console.log(placesToDump);
 
 }
-
-// const sortArr = (arr) => {
-//     console.log("sort initialize");
-//     for (let i = 0; i < arr.length; i++) {
-//         for (let z = 0; z < arr.length; z++) {
-//             if (arr[z].rating < arr[(z + 1)].rating) {
-//                 let lower = arr[z];
-//                 let higher = arr[(z + 1)];
-//                 console.log('lower', lower);
-//                 console.log('higher', higher);
-
-//                 arr[z] = higher;
-//                 arr[(z + 1)] = lower;
-//             } else {
-//                 console.log("this algo is porbs not working correctly");
-//             }
-//         }
-//     }
-
-//     console.log(arr);
-// }
 
 const getTravelUrl = (origin, destination) => {
     return `<a href="https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving" target="_blank">${destination}</a>`;
