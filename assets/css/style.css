@@ -3,8 +3,6 @@ body{
     font-family: 'Vidaloka', serif;
 }
 #geo-map{
-    /* background-color: yellow; */
-    /* z-index: 30; */
     width: 400px;
     height: 500px;
 }
