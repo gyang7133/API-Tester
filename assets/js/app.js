@@ -309,6 +309,7 @@ const renderMarks = (map, idArr) => {
                         marker.setAnimation(google.maps.Animation.BOUNCE);
                     }
                 }
+               
                 //checks to see if the place has a phone
                 function checkPhone() {
                     let phone = place.formatted_phone_number;
@@ -323,46 +324,36 @@ const renderMarks = (map, idArr) => {
                     }
 
                 }
-                //if the place rating is greater than or equal to 4.0, render the following content to the 'restaurant recommendations' div
 
-                // if (place.rating >= 4.0) {
+                //function to retrieve opening hours for day the app is running
+                function checkHours() {
+                    let isOpen = place.opening_hours.open_now;
+                    let hours = place.opening_hours.weekday_text;
+                    var dayOfTheWeekIndex = new Date().getDay();
+                    let displayHours = "";
+                    
+                    if(isOpen === true)
+                    {
+                        --dayOfTheWeekIndex;
+                        if (dayOfTheWeekIndex<0)
+                        {
+                            dayOfTheWeekIndex=6;
+                        }
+                        
+                        displayHours = hours[dayOfTheWeekIndex];
+                        
+                        return `${displayHours}`;
+                    }
+                    else
+                    {
+                        return `<br>`;
 
-                //     let text = $('<div id="fade-test"><strong>' + place.name + '</strong><br>' +
-                //         'Rating: ' + place.rating + checkPhone() +
-                //         '</div>' + getTravelUrl(address, place.formatted_address));
+                    }
+                }
 
-                //     $("#rest-info").append(text);
-
-                //     console.log("Code is working");
-
-                // }
-
-                // if (place.rating >= 4.0)
-                //  {
-                //     let gPlace = 
-                //     {
-                //         name: place.name,
-                //         rating: place.rating,
-                //         phone: checkPhone(),
-                //         address: place.formatted_address
-
-                //     }
-
-                //     placesToDump.push(gPlace);
-
-
-                // }
-
-                
+                // place.opening_hours.weekday_text
 
                  if (place.rating >= 4.0) {
-
-                    // let text = $('<div id="fade-test"><strong>' + place.name + '</strong><br>' +
-                    //     'Rating: ' + place.rating + checkPhone() +
-                    //     '</div>' + getTravelUrl(address, place.formatted_address));
-
-                    // $("#rest-info").append(text);
-                    // console.log(text);
                     $("#rest-info").append(
                         `
                         <div class="card my-3">
@@ -370,12 +361,12 @@ const renderMarks = (map, idArr) => {
                         <div class="card-body">
                             <!-- restaurant info get populated here -->
                             <p class="card-text">${('<div id="fade-test"><strong>' + place.name + '</strong><br>' +
-                            'Rating: ' + place.rating + checkPhone() +
-                            '</div>' + getTravelUrl(address, place.formatted_address))}</p>
+                            'Rating: ' + place.rating + '<br>Hours Open: ' + checkHours() + checkPhone() +
+                            '</div>' + getTravelUrl(address, place.formatted_address)) } </p>
                         </div>
                         <div class="card-footer">
                         <!-- restaurant url population -->
-                        <a href="#" class="card-link" target="_blank">Link to Resturant website</a>
+                        <a href="${place.website}" class="card-link" target="_blank">Check out menus on Website</a>
                         </div>
                         </div>
                         `
